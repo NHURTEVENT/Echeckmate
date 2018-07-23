@@ -41,25 +41,32 @@ public class Board extends JPanel{
                 // expanding it to fill all the space.
                 Dimension d = this.getParent().getSize();
                 int newSize = (d.width-player1Side.getWidth()-player2Side.getWidth() )> d.height ? d.height : (d.width-player1Side.getWidth()-player2Side.getWidth() );
-                newSize = newSize == 0 ? 200 : newSize;
+                newSize = newSize < 200 ? 200: newSize;
                 return new Dimension(newSize, newSize);
             }
 
+            
     public Board() {
-        
         mainPanel = new JPanel();
         this.setLayout(new GridBagLayout());
+        mainPanel.setMinimumSize(new Dimension(600, 200));
         mainPanel.setLayout(new GridBagLayout());
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x <8 ; x++) {
                 Color tileColor = (x % 2 == 0 && y % 2 == 1) || x % 2 == 1 && y % 2 == 0 ? Color.BLACK : Color.WHITE;
                 //mainPanel.repaint();
-                addToGUI(new Tile(x, y, tileColor, this), x+1, y);
+/////
+                //if(x%2 ==0)
+                    addToGUI(new Tile(x, y, tileColor, this, PieceType.ROOK), x+1, y);
+                //else
+                //    addToGUI(new Tile(x, y, tileColor, this, PieceType.NONE), x+1, y);
             }
         }
         Color color = Color.black;
         //addPlayerSide(color);
         JFrame f = new JFrame();
+        f.pack();
+        f.setMinimumSize(new Dimension(600+f.getInsets().left+f.getInsets().right, 200+f.getInsets().top +f.getInsets().bottom));
         //f.setLayout(new GridBagLayout());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //mainPanel.revalidate();
@@ -71,7 +78,7 @@ public class Board extends JPanel{
         this.setVisible(true);
         GridBagConstraints constr = new GridBagConstraints();
         constr.fill = GridBagConstraints.BOTH;
-        constr.weightx =1;
+        constr.weightx =0;
         constr.weighty =1;
         player1Side = new PlayerSide(color);
         getMainPanel().add(player1Side,constr);
@@ -83,8 +90,8 @@ public class Board extends JPanel{
         getMainPanel().add(this, constr);
         constr.fill = GridBagConstraints.BOTH;
 
+        constr.weightx =0;
         constr.weighty =1;
-        constr.weightx =1;
         Color otherPlayerColor = color == Color.white ? Color.black: color.white;
         player2Side = new PlayerSide(otherPlayerColor);
         getMainPanel().add(player2Side, constr);
