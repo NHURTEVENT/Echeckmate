@@ -7,6 +7,7 @@ package echeckmate.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -33,18 +34,22 @@ public class Tile extends JPanel {
 
     int x;
     int y;
+    String id;
     Color color;
+    Color pieceColor;
     int CELLSIZE;
-    PieceType piece;
+    private PieceType piece;
     Board board;
 
-    public Tile(int x, int y, Color color, Board board, PieceType type) {
+    public Tile(int x, int y, Color color, Board board, PieceType type, Color pieceColor) {
         
         this.board = board;
         this.CELLSIZE = board.getSize().height < board.getSize().width ? board.getSize().height / 8 : board.getSize().width / 8;
         this.x = x * CELLSIZE;
         this.y = y * CELLSIZE;
+        this.id = calculateId(x,y);
         this.color = color;
+        this.pieceColor = pieceColor;
         this.piece = type;
         this.setBackground(color);
         this.setLayout(new BorderLayout());
@@ -71,14 +76,14 @@ public class Tile extends JPanel {
     }
 
     private ImageIcon getIcon() {
-        return PieceIconFactory.getInstance().getIcon(piece, color);
+        return PieceIconFactory.getInstance().getIcon(getPiece(), pieceColor);
     }
 
     private SwingWorker createWorker() {
         return new SwingWorker<ImageIcon, Void>() {
             @Override
             protected ImageIcon doInBackground() throws Exception {
-                CELLSIZE = board.getSize().height < board.getSize().width ? board.getSize().height / 8 : board.getSize().width / 8;
+                
                 ImageIcon icon = getIcon();
                 Image image = icon.getImage();
                 image = image.getScaledInstance(CELLSIZE, CELLSIZE, java.awt.Image.SCALE_SMOOTH);
@@ -91,7 +96,10 @@ public class Tile extends JPanel {
                 try {
                     removeAll();
                     ImageIcon ico = get();
-                    add(new JLabel(ico), BorderLayout.CENTER);
+                    JLabel label = new JLabel(ico);
+                    //TileLabel label = new TileLabel("ico");
+                    label.setMinimumSize(new Dimension(CELLSIZE, CELLSIZE));
+                    add(label, BorderLayout.CENTER);
                     revalidate();
                     repaint();
                 } catch (InterruptedException ex) {
@@ -103,9 +111,56 @@ public class Tile extends JPanel {
             }
         };
     }
+    
+    
+    @Override
+            public Dimension getPreferredSize() {
+                // Relies on being the only component
+                // in a layout that will center it without
+                // expanding it to fill all the space.
+                Dimension d = this.getParent().getSize();
+                CELLSIZE = CELLSIZE < 25 ? 25: CELLSIZE;
+                return new Dimension(CELLSIZE, CELLSIZE);
+            }
 
     private void drawIcon() {
-        createWorker().execute();
+        CELLSIZE = board.getSize().height > board.getSize().width ? board.getSize().height / 8 : board.getSize().width / 8;
+        if(piece != PieceType.NONE)
+            createWorker().execute();
+    }
+
+    /**
+     * @return the piece
+     */
+    public PieceType getPiece() {
+        return piece;
+    }
+
+    /**
+     * @param pieceType the piece to set
+     */
+    public void setPieceType(PieceType pieceType) {
+        this.piece = pieceType;
+    }
+    
+    /**
+     * @param piece the piece to set
+     */
+    public void setPiece(PieceType pieceType, Color pieceColor) {
+        this.piece = pieceType;
+        this.pieceColor = pieceColor;
+        drawIcon();
+    }
+    
+    public String getId(){
+        return this.id;
+    }
+
+    private String calculateId(int x, int y) {
+         String id = x >= 0 && x <8  ? String.valueOf((char)(x + 65))+(8-y) : null;
+         if(id == null)
+             throw new UnsupportedOperationException("could not asses tile identifier");
+         return id;
     }
 
 }
