@@ -38,9 +38,103 @@ public class Board {
         }
     }
     
-   
+    public void createPieces(){
+        setPieces(new ArrayList<>());
+        getPieces().add(new Rook(new Position("A1"), Color.white, this));
+    }
+
     public void resetBoard() {
-                throw new UnsupportedOperationException("not implemented yet");
+        Tile tileA1 = getTiles().get(new Position("A1"));
+        Rook rookLW = new Rook(new Position("A1"),Color.white, this);
+        getPieces().add(rookLW);
+        tileA1.setPiece(rookLW);
+        Tile tileB1 = getTiles().get(new Position("B1"));
+        Knight knightLW = new Knight(new Position("B1"),Color.white, this);
+        getPieces().add(knightLW);
+        tileB1.setPiece(knightLW);
+        Tile tileC1 = getTiles().get(new Position("C1"));
+        Bishop bishopLW = new Bishop(new Position("C1"),Color.white, this);
+        getPieces().add(bishopLW);
+        tileC1.setPiece(bishopLW);
+        Tile tileD1 = getTiles().get(new Position("D1"));
+        Queen queenW = new Queen(new Position("D1"),Color.white, this);
+        getPieces().add(queenW);
+        tileD1.setPiece(queenW);
+        Tile tileE1 = getTiles().get(new Position("E1"));
+        King kingW = new King(new Position("E1"),Color.white, this);
+        getPieces().add(kingW);
+        tileE1.setPiece(kingW);
+        Tile tileF1 = getTiles().get(new Position("F1"));
+        Bishop bishopRW = new Bishop(new Position("F1"),Color.white, this);
+        getPieces().add(bishopRW);
+        tileF1.setPiece(bishopRW);
+        Tile tileG1 = getTiles().get(new Position("G1"));
+        Knight knightRW = new Knight(new Position("G1"),Color.white, this);
+        getPieces().add(knightRW);
+        tileG1.setPiece(knightRW);
+        Tile tileH1 = getTiles().get(new Position("H1"));
+        Rook rookRW = new Rook(new Position("H1"),Color.white, this);
+        getPieces().add(rookRW);
+        tileH1.setPiece(rookRW);
+        Tile tileA8 = getTiles().get(new Position("A8"));
+        Rook rookLB = new Rook(new Position("A8"),Color.black, this);
+        getPieces().add(rookLB);
+        tileA8.setPiece(rookLB);
+        Tile tileB8 = getTiles().get(new Position("B8"));
+        Knight knightLB = new Knight(new Position("B8"),Color.black, this);
+        getPieces().add(knightLB);
+        tileB8.setPiece(knightLB);
+        Tile tileC8 = getTiles().get(new Position("C8"));
+        Bishop bishopLB = new Bishop(new Position("C8"),Color.black, this);
+        getPieces().add(bishopLB);
+        tileC8.setPiece(bishopLB);
+        Tile tileD8 = getTiles().get(new Position("D8"));
+        Queen queenB = new Queen(new Position("D8"),Color.black, this);
+        getPieces().add(queenB);
+        tileD8.setPiece(queenB);
+        Tile tileE8 = getTiles().get(new Position("E8"));
+        King kingB = new King(new Position("E8"),Color.black, this);
+        getPieces().add(kingB);
+        tileE8.setPiece(kingB);
+        Tile tileF8 = getTiles().get(new Position("F8"));
+        Bishop bishopRB = new Bishop(new Position("F8"),Color.black, this);
+        getPieces().add(bishopRB);
+        tileF8.setPiece(bishopRB);
+        Tile tileG8 = getTiles().get(new Position("G8"));
+        Knight knightRB = new Knight(new Position("G8"),Color.black, this);
+        getPieces().add(knightRB);
+        tileG8.setPiece(knightRB);
+        Tile tileH8 = getTiles().get(new Position("H8"));
+        Rook rookRB = new Rook(new Position("H8"),Color.black, this);
+        getPieces().add(rookRB);
+        tileH8.setPiece(rookRB);
+        
+        for (int i = 0; i < 8; i++) {
+            String letter = String.valueOf((char) (i + 65));
+            Tile tile = getTiles().get(new Position(letter + 2));
+            Pawn pawnW = new Pawn(new Position(letter+2),Color.white, this);
+            getPieces().add(pawnW);
+            tile.setPiece(pawnW);
+        }
+        for (int i = 0; i < 8; i++) {
+            String letter = String.valueOf((char) (i + 65));
+            Tile tile = getTiles().get(new Position(letter + 7));
+            Pawn pawnB = new Pawn(new Position(letter+7),Color.black, this);
+            getPieces().add(pawnB);
+            //tile.setPiece(pawnB);
+        }
+       
+        Tile tileB6 = getTiles().get(new Position("B6"));
+        Knight knightF = new Knight(new Position("B6"),Color.black, this);
+        getPieces().add(knightF);
+        tileB6.setPiece(knightF);
+        
+        Tile tileD6 = getTiles().get(new Position("D6"));
+        Knight knight = new Knight(new Position("D6"),Color.WHITE, this);
+        getPieces().add(knight);
+        tileD6.setPiece(knight);
+        
+        
     }
 
     public boolean isEmpty(Position position) {
