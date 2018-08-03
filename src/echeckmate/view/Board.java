@@ -5,6 +5,7 @@
  */
 package echeckmate.view;
 
+import echeckmate.Position;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -26,7 +27,7 @@ import javax.swing.JPanel;
 public class Board extends JPanel {
 
     //ArrayList<Tile> tiles;
-    HashMap<String, Tile> tiles;
+    private HashMap<Position, Tile> tiles;
     private JPanel mainPanel;
     private JPanel player1Side;
     private JPanel player2Side;
@@ -59,9 +60,10 @@ public class Board extends JPanel {
                 //mainPanel.repaint();
 /////
                 //if(x%2 ==0)
-                Tile tile = new Tile(x, y, tileColor, this, PieceType.NONE, Color.white);
+                Position position = new Position(x+1, y+1);
+                Tile tile = new Tile(position, tileColor, this, PieceType.NONE, Color.white);
                 addToGUI(tile, x + 1, y);
-                tiles.put(tile.getId(), tile);
+                tiles.put(position, tile);
                 //else
                 //    addToGUI(new Tile(x, y, tileColor, this, PieceType.NONE), x+1, y);
             }
@@ -104,7 +106,7 @@ public class Board extends JPanel {
         //f.add(new JLabel("hi"));
         f.pack();
         f.setVisible(true);
-        resetBoard(Color.white);
+        //resetBoard(Color.white);
     }
 
     /**
@@ -168,50 +170,73 @@ public class Board extends JPanel {
     }
 
     public void resetBoard(Color player1Color) {
-        Tile tileA1 = tiles.get("A1");
+        Tile tileA1 = getTiles().get(new Position("A1"));
         tileA1.setPiece(PieceType.ROOK, Color.white);
-        Tile tileA2 = tiles.get("B1");
+        Tile tileA2 = getTiles().get(new Position("B1"));
         tileA2.setPiece(PieceType.KNIGHT, Color.white);
-        Tile tileA3 = tiles.get("C1");
+        Tile tileA3 = getTiles().get(new Position("C1"));
         tileA3.setPiece(PieceType.BISHOP, Color.white);
-        Tile tileA4 = tiles.get("D1");
+        Tile tileA4 = getTiles().get(new Position("D1"));
         tileA4.setPiece(PieceType.QUEEN, Color.white);
-        Tile tileA5 = tiles.get("E1");
+        Tile tileA5 = getTiles().get(new Position("E1"));
         tileA5.setPiece(PieceType.KING, Color.white);
-        Tile tileA6 = tiles.get("F1");
+        Tile tileA6 = getTiles().get(new Position("F1"));
         tileA6.setPiece(PieceType.BISHOP, Color.white);
-        Tile tileA7 = tiles.get("G1");
+        Tile tileA7 = getTiles().get(new Position("G1"));
         tileA7.setPiece(PieceType.KNIGHT, Color.white);
-        Tile tileA8 = tiles.get("H1");
+        Tile tileA8 = getTiles().get(new Position("H1"));
         tileA8.setPiece(PieceType.ROOK, Color.white);
-        Tile tileH1 = tiles.get("A8");
+        Tile tileH1 = getTiles().get(new Position("A8"));
         tileH1.setPiece(PieceType.ROOK, Color.black);
-        Tile tileH2 = tiles.get("B8");
+        Tile tileH2 = getTiles().get(new Position("B8"));
         tileH2.setPiece(PieceType.KNIGHT, Color.black);
-        Tile tileH3 = tiles.get("C8");
+        Tile tileH3 = getTiles().get(new Position("C8"));
         tileH3.setPiece(PieceType.BISHOP, Color.black);
-        Tile tileH4 = tiles.get("D8");
+        Tile tileH4 = getTiles().get(new Position("D8"));
         tileH4.setPiece(PieceType.KING, Color.black);
-        Tile tileH5 = tiles.get("E8");
+        Tile tileH5 = getTiles().get(new Position("E8"));
         tileH5.setPiece(PieceType.QUEEN, Color.black);
-        Tile tileH6 = tiles.get("F8");
+        Tile tileH6 = getTiles().get(new Position("F8"));
         tileH6.setPiece(PieceType.BISHOP, Color.black);
-        Tile tileH7 = tiles.get("G8");
+        Tile tileH7 = getTiles().get(new Position("G8"));
         tileH7.setPiece(PieceType.KNIGHT, Color.black);
-        Tile tileH8 = tiles.get("H8");
+        Tile tileH8 = getTiles().get(new Position("H8"));
         tileH8.setPiece(PieceType.ROOK, Color.black);
         for (int i = 0; i < 8; i++) {
             String letter = String.valueOf((char)(i + 65));
-            Tile tile = tiles.get(letter + 2);
+            Tile tile = getTiles().get(new Position(letter + 2));
             tile.setPiece(PieceType.PAWN, Color.white);
         }
         for (int i = 0; i < 8; i++) {
             String letter = String.valueOf((char)(i + 65));
-            Tile tile = tiles.get(letter + 7);
+            Tile tile = getTiles().get(new Position(letter + 7));
             tile.setPiece(PieceType.PAWN, Color.black);
         }
         revalidate();
         repaint();
+    }
+
+    /**
+     * @return the tiles
+     */
+    public HashMap<Position, Tile> getTiles() {
+        return tiles;
+    }
+
+    /**
+     * @param tiles the tiles to set
+     */
+    public void setTiles(HashMap<Position, Tile> tiles) {
+        this.tiles = tiles;
+    }
+
+    public void resetBoardColors() {
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Color tileColor = (x % 2 == 0 && y % 2 == 1) || x % 2 == 1 && y % 2 == 0 ? Color.BLACK : Color.WHITE;
+                getTiles().get(new Position(x+1, y+1)).setColor(tileColor);
+            }
+        }
     }
 
 }

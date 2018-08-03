@@ -5,6 +5,7 @@
  */
 package echeckmate.view;
 
+import echeckmate.Position;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,6 +19,7 @@ import java.awt.event.ComponentListener;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -32,22 +34,17 @@ import javax.swing.Timer;
  */
 public class Tile extends JPanel {
 
-    int x;
-    int y;
-    String id;
-    Color color;
-    Color pieceColor;
+    private Position position;
+    private Color color;
+    private Color pieceColor;
     int CELLSIZE;
     private PieceType piece;
-    Board board;
+    private Board board;
 
-    public Tile(int x, int y, Color color, Board board, PieceType type, Color pieceColor) {
-        
+    public Tile(Position position, Color color, Board board, PieceType type, Color pieceColor) {
+        this.position = position;
         this.board = board;
         this.CELLSIZE = board.getSize().height < board.getSize().width ? board.getSize().height / 8 : board.getSize().width / 8;
-        this.x = x * CELLSIZE;
-        this.y = y * CELLSIZE;
-        this.id = calculateId(x,y);
         this.color = color;
         this.pieceColor = pieceColor;
         this.piece = type;
@@ -76,7 +73,7 @@ public class Tile extends JPanel {
     }
 
     private ImageIcon getIcon() {
-        return PieceIconFactory.getInstance().getIcon(getPiece(), pieceColor);
+        return PieceIconFactory.getInstance().getIcon(getPiece(), getPieceColor());
     }
 
     private SwingWorker createWorker() {
@@ -124,7 +121,7 @@ public class Tile extends JPanel {
             }
 
     private void drawIcon() {
-        CELLSIZE = board.getSize().height > board.getSize().width ? board.getSize().height / 8 : board.getSize().width / 8;
+        CELLSIZE = getBoard().getSize().height > getBoard().getSize().width ? getBoard().getSize().height / 8 : getBoard().getSize().width / 8;
         if(piece != PieceType.NONE)
             createWorker().execute();
     }
@@ -148,19 +145,68 @@ public class Tile extends JPanel {
      */
     public void setPiece(PieceType pieceType, Color pieceColor) {
         this.piece = pieceType;
-        this.pieceColor = pieceColor;
+        this.setPieceColor(pieceColor);
         drawIcon();
     }
-    
-    public String getId(){
-        return this.id;
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
     }
 
-    private String calculateId(int x, int y) {
-         String id = x >= 0 && x <8  ? String.valueOf((char)(x + 65))+(8-y) : null;
-         if(id == null)
-             throw new UnsupportedOperationException("could not asses tile identifier");
-         return id;
+    /**
+     * @param color the color to set
+     */
+    public void setColor(Color color) {
+        this.color = color;
+        this.setBackground(color);
+        if(color == Color.red)
+            this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        revalidate();
+        repaint();
     }
 
+    /**
+     * @return the position
+     */
+    public Position getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    /**
+     * @return the pieceColor
+     */
+    public Color getPieceColor() {
+        return pieceColor;
+    }
+
+    /**
+     * @param pieceColor the pieceColor to set
+     */
+    public void setPieceColor(Color pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+    /**
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * @param board the board to set
+     */
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 }
