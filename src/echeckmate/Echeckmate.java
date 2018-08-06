@@ -5,6 +5,7 @@
  */
 package echeckmate;
 
+import controller.Controller;
 import echeckmate.view.Board;
 
 /**
@@ -17,7 +18,7 @@ public class Echeckmate {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Board();
+        new Controller();
     }
     
 }
